@@ -26,13 +26,19 @@ GRANT gus_w TO ${TEMPLATE_DB_USER} WITH INHERIT TRUE;
 CREATE TABLESPACE indx OWNER ${TEMPLATE_DB_USER} LOCATION '/var/lib/postgres/data/indx';
 EOSQL
 
-cd $GUS_HOME/bin
-
 build GUS install -append -installDBSchemaSkipRoles
+
+cd $GUS_HOME/bin
 
 DB_PLATFORM=Postgres \
 DB_USER=$TEMPLATE_DB_USER \
 DB_PASS=$TEMPLATE_DB_PASS \
 ./installApidbSchema --dbName $TEMPLATE_DB_NAME --dbHost localhost --create
 
+failed=$?
+
 su postgres -c 'pg_ctl stop'
+
+if [ $failed -ne 0 ]; then
+  exit 1
+fi
