@@ -41,9 +41,9 @@ RUN ./repo-cloning.sh
 ARG GITHUB_USERNAME \
     GITHUB_TOKEN
 
-COPY [ "build/build-gus-home.sh", "build/db-install.sh", "./" ]
+COPY [ "build/build-gus-config.sh", "build/db-install.sh", "./" ]
 
-RUN ./build-gus-home.sh
+RUN ./build-gus-config.sh
 
 RUN ./db-install.sh
 
