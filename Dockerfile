@@ -46,8 +46,3 @@ COPY [ "build/build-gus-config.sh", "build/db-install.sh", "./" ]
 RUN ./build-gus-config.sh
 
 RUN ./db-install.sh
-
-# # WE NEED:
-# #  GUS
-# #  CBIL
-# #  install
