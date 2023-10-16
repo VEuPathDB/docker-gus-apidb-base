@@ -30,8 +30,8 @@ ARG GUS_COMMIT_HASH=bca3334a86f9d86fde04ac38617dc40a6f9c410d \
 ENV GUS_HOME=/opt/veupathdb/gus_home \
     PROJECT_HOME=/opt/veupathdb/project_home \
     TEMPLATE_DB_NAME="template" \
-    TEMPLATE_DB_USER="postgres" \
-    TEMPLATE_DB_PASS=""
+    TEMPLATE_DB_USER="someone" \
+    TEMPLATE_DB_PASS="password"
 ENV PATH="$PATH:${GUS_HOME}/bin"
 
 COPY "build/repo-cloning.sh" "./"
