@@ -4,6 +4,7 @@ A docker image that contains a Postgres instance pre-loaded with the GUS and
 ApiDB schemata as well as the generated GUS model perl objects.
 
 This container includes:
+
 * PostgreSQL 15
 * Java 21
 * Python 3
