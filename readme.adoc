@@ -1,0 +1,35 @@
+= GUS/ApiDB Schema Base
+
+A docker image that contains a Postgres instance pre-loaded with the GUS and
+ApiDB schemata as well as the generated GUS model perl objects.
+
+This container includes:
+* PostgreSQL 15
+* Java 21
+* Python 3
+* Perl 5
+** json
+** xml-simple
+** date-manip
+** text-csv
+** tree_dag_node
+** dbi
+** dbd-pg
+* Ant
+* Maven
+
+== License
+
+
+Copyright 2023 VEuPathDB
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License.  You may obtain a copy of the
+License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations under the License.
