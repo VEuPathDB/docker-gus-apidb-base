@@ -28,14 +28,18 @@ EOSQL
 
 build GUS install -append -installDBSchemaSkipRoles
 
-cd $GUS_HOME/bin
-
-DB_PLATFORM=Postgres \
-DB_USER=$TEMPLATE_DB_USER \
-DB_PASS=$TEMPLATE_DB_PASS \
-./installApidbSchema --dbName $TEMPLATE_DB_NAME --dbHost localhost --create
-
 failed=$?
+
+if [ $failed -e 0 ]; then
+  cd $GUS_HOME/bin
+
+  DB_PLATFORM=Postgres \
+  DB_USER=$TEMPLATE_DB_USER \
+  DB_PASS=$TEMPLATE_DB_PASS \
+  ./installApidbSchema --dbName $TEMPLATE_DB_NAME --dbHost localhost --create
+
+  failed=$?
+fi
 
 su postgres -c 'pg_ctl stop'
 

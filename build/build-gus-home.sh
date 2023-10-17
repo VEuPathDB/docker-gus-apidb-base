@@ -23,7 +23,7 @@ cp -r Definition/config/* $GUS_HOME/config
 cd $PROJECT_HOME/ApidbSchema
 mkdir -p $GUS_HOME/lib/sql/apidbschema
 cp -r Main/bin/* $GUS_HOME/bin
-cp -r Main/lib/sql/* $GUS_HOME/lib/sql/apidbschema
+cp -r Main/lib/sql/* $GUS_HOME/lib/sql/
 
 # install SchemaInstallUtils
 cd $PROJECT_HOME/SchemaInstallUtils
