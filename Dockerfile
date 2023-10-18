@@ -2,20 +2,43 @@ FROM ubuntu:23.10
 
 ENV PGDATA=/var/lib/postgresql/data \
     ORACLE_HOME=/opt/oracle \
-    LD_LIBRARY_PATH=/opt/oracle
+    LD_LIBRARY_PATH=/opt/oracle \
+    JAVA_HOME=/opt/java
 
 RUN apt-get update \
-    && apt-get install -y git perl libaio1 unzip wget ant maven postgresql-15 \
+    && apt-get install -y git perl libaio1 unzip wget postgresql-15 \
         libtree-dagnode-perl libxml-simple-perl libjson-perl libtext-csv-perl \
         libdate-manip-perl libdbi-perl libdbd-pg-perl \
         libmodule-install-rdf-perl libstatistics-descriptive-perl \
-    && apt-get clean
-
-RUN mkdir -p ${ORACLE_HOME} \
-    && wget https://download.oracle.com/otn_software/linux/instantclient/2111000/instantclient-basic-linux.x64-21.11.0.0.0dbru.zip -O ${ORACLE_HOME}/instant.zip \
-    && wget https://download.oracle.com/otn_software/linux/instantclient/2111000/instantclient-sqlplus-linux.x64-21.11.0.0.0dbru.zip -O ${ORACLE_HOME}/sqlplus.zip \
-    && wget https://download.oracle.com/otn_software/linux/instantclient/2111000/instantclient-sdk-linux.x64-21.11.0.0.0dbru.zip -O ${ORACLE_HOME}/sdk.zip \
+    && mkdir -p ${JAVA_HOME} \
+    && cd ${JAVA_HOME} \
+    && wget -O java.tgz https://corretto.aws/downloads/latest/amazon-corretto-21-x64-linux-jdk.tar.gz \
+    && tar -xf java.tgz \
+    && rm java.tgz \
+    && mv amazon-corretto-21.0.1.12.1-linux-x64/* . \
+    && apt-get clean \
+    \
+    && mkdir -p /opt/ant \
+    && cd /opt/ant \
+    && wget -O ant.tgz https://dlcdn.apache.org//ant/binaries/apache-ant-1.10.14-bin.tar.gz \
+    && tar -xf ant.tgz \
+    && rm ant.tgz \
+    && mv apache-ant-1.10.14/* . \
+    && ln -s /opt/ant/bin/ant /usr/bin/ant \
+    \
+    && mkdir -p /opt/maven \
+    && cd /opt/maven \
+    && wget -O maven.tgz https://dlcdn.apache.org/maven/maven-3/3.9.5/binaries/apache-maven-3.9.5-bin.tar.gz \
+    && tar -xf maven.tgz \
+    && rm maven.tgz \
+    && mv apache-maven-3.9.5/* . \
+    && ln -s /opt/maven/bin/mvn /usr/bin/mvn \
+    \
+    && mkdir -p ${ORACLE_HOME} \
     && cd ${ORACLE_HOME} \
+    && wget https://download.oracle.com/otn_software/linux/instantclient/2111000/instantclient-basic-linux.x64-21.11.0.0.0dbru.zip -O instant.zip \
+    && wget https://download.oracle.com/otn_software/linux/instantclient/2111000/instantclient-sqlplus-linux.x64-21.11.0.0.0dbru.zip -O sqlplus.zip \
+    && wget https://download.oracle.com/otn_software/linux/instantclient/2111000/instantclient-sdk-linux.x64-21.11.0.0.0dbru.zip -O sdk.zip \
     && unzip instant.zip \
     && unzip sqlplus.zip \
     && unzip sdk.zip \

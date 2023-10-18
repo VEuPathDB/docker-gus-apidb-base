@@ -29,4 +29,3 @@ cp -r Main/lib/sql/* $GUS_HOME/lib/sql/
 cd $PROJECT_HOME/SchemaInstallUtils
 mkdir -p $GUS_HOME/lib/perl/SchemaInstallUtils/Main/
 cp Main/Utils.pm $GUS_HOME/lib/perl/SchemaInstallUtils/Main/
-
