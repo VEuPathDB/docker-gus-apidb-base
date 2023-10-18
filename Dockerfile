@@ -1,17 +1,33 @@
-FROM amazoncorretto:21.0.0-alpine3.18
+FROM ubuntu:23.10
 
-ENV PGDATA=/var/lib/postgresql/data
+ENV PGDATA=/var/lib/postgresql/data \
+    ORACLE_HOME=/opt/oracle \
+    LD_LIBRARY_PATH=/opt/oracle
 
-# Install necessary packages.
-RUN apk add git perl perl-utils libaio python3 unzip perl-json perl-xml-simple \
-            perl-date-manip perl-text-csv perl-tree-dag_node postgresql15 bash \
-            maven apache-ant perl-dbi perl-dbd-pg \
-    && cpan Module-Install-RDF-0.009 Statistics-Descriptive-3.0801 \
+RUN apt-get update \
+    && apt-get install -y git perl libaio1 unzip wget ant maven postgresql-15 \
+        libtree-dagnode-perl libxml-simple-perl libjson-perl libtext-csv-perl \
+        libdate-manip-perl libdbi-perl libdbd-pg-perl \
+        libmodule-install-rdf-perl libstatistics-descriptive-perl \
+    && apt-get clean
+
+RUN mkdir -p ${ORACLE_HOME} \
+    && wget https://download.oracle.com/otn_software/linux/instantclient/2111000/instantclient-basic-linux.x64-21.11.0.0.0dbru.zip -O ${ORACLE_HOME}/instant.zip \
+    && wget https://download.oracle.com/otn_software/linux/instantclient/2111000/instantclient-sqlplus-linux.x64-21.11.0.0.0dbru.zip -O ${ORACLE_HOME}/sqlplus.zip \
+    && wget https://download.oracle.com/otn_software/linux/instantclient/2111000/instantclient-sdk-linux.x64-21.11.0.0.0dbru.zip -O ${ORACLE_HOME}/sdk.zip \
+    && cd ${ORACLE_HOME} \
+    && unzip instant.zip \
+    && unzip sqlplus.zip \
+    && unzip sdk.zip \
+    && rm instant.zip sdk.zip sqlplus.zip \
+    && mv instantclient_21_11/* . \
+    && rm -rf instantclient_21_11 \
+    && mv sqlplus /usr/bin/sqlplus \
+    && cpan DBD::Oracle \
     && mkdir -p /run/postgresql \
     && chown postgres:postgres /run/postgresql
 
-
-# Copy postgres config files
+# # Copy postgres config files
 COPY [ \
     "pg/pg_hba.conf", \
     "pg/pg_ident.conf", \
