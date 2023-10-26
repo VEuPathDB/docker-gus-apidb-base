@@ -71,7 +71,7 @@ ENV GUS_HOME=/opt/veupathdb/gus_home \
     TEMPLATE_DB_NAME="template" \
     TEMPLATE_DB_USER="someone" \
     TEMPLATE_DB_PASS="password"
-ENV PATH="$PATH:${GUS_HOME}/bin"
+ENV PATH="$PATH:${GUS_HOME}/bin:${JAVA_HOME}/bin"
 
 ARG GITHUB_USERNAME \
     GITHUB_TOKEN
