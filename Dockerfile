@@ -50,7 +50,7 @@ RUN apt-get update \
     && mkdir -p /run/postgresql \
     && chown postgres:postgres /run/postgresql
 
-# # Copy postgres config files
+# Copy postgres config files
 COPY [ \
     "pg/pg_hba.conf", \
     "pg/pg_ident.conf", \
