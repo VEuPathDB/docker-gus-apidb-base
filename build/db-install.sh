@@ -2,8 +2,8 @@
 
 echo "Initializing Postgres"
 su postgres <<EOSU
-initdb
-pg_ctl start
+/usr/lib/postgresql/15/bin/initdb
+/usr/lib/postgresql/15/bin/pg_ctl start
 EOSU
 
 echo "Creating 'indx' tablespace directory"
@@ -45,7 +45,7 @@ if [ $failed -e 0 ]; then
   failed=$?
 fi
 
-su postgres -c 'pg_ctl stop'
+su postgres -c '/usr/lib/postgresql/15/bin/pg_ctl stop'
 
 if [ $failed -ne 0 ]; then
   exit 1
