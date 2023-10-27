@@ -6,9 +6,9 @@ ENV PGDATA=/var/lib/postgresql/data \
     JAVA_HOME=/opt/java
 
 RUN apt-get update \
-    && apt-get install -y git perl libaio1 unzip wget postgresql-15 \
+    && apt-get install -y git perl libaio1 unzip wget postgresql-15 make gcc \
         libtree-dagnode-perl libxml-simple-perl libjson-perl libtext-csv-perl \
-        libdate-manip-perl libdbi-perl libdbd-pg-perl \
+        libdate-manip-perl libdbi-perl libdbd-pg-perl libtest-nowarnings-perl \
         libmodule-install-rdf-perl libstatistics-descriptive-perl \
     && mkdir -p ${JAVA_HOME} \
     && cd ${JAVA_HOME} \
