@@ -20,6 +20,12 @@ This container includes:
 * Ant
 * Maven
 
+== Postgres
+
+The internal postgres instance is not running by default.  Images that need
+Postgres to run will need to have a startup script that starts the Postgres
+server.
+
 == License
 
 
