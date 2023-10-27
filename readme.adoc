@@ -16,6 +16,7 @@ This container includes:
 ** tree_dag_node
 ** dbi
 ** dbd-pg
+** dbd-oracle
 * Ant
 * Maven
 
