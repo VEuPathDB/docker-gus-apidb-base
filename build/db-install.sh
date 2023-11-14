@@ -1,4 +1,20 @@
-#!/bin/sh
+#!/bin/bash
+
+set -e
+
+PATH=$PROJECT_HOME/install/bin:$GUS_HOME/bin:$PATH
+
+stopInstance() {
+  su postgres -c '/usr/lib/postgresql/15/bin/pg_ctl stop'
+}
+
+stopInstanceAndExit() {
+  stopInstance
+  exit 1;
+}
+
+# Trap any ERR signal and run the stopInstance function
+trap 'stopInstanceAndExit' ERR
 
 echo "Initializing Postgres"
 su postgres <<EOSU
@@ -31,22 +47,16 @@ EOSQL
 echo "Running GUS install"
 build GUS install -append -installDBSchemaSkipRoles
 
-failed=$?
-
-if [ $failed -e 0 ]; then
-  cd $GUS_HOME/bin
-
-  echo "Running installApidbSchema"
-  DB_PLATFORM=Postgres \
+echo "Running installApidbSchema"
+DB_PLATFORM=Postgres \
   DB_USER=$TEMPLATE_DB_USER \
   DB_PASS=$TEMPLATE_DB_PASS \
-  ./installApidbSchema --dbName $TEMPLATE_DB_NAME --dbHost localhost --create
+  installApidbSchema --dbName $TEMPLATE_DB_NAME --dbHost localhost --create
 
-  failed=$?
-fi
 
-su postgres -c '/usr/lib/postgresql/15/bin/pg_ctl stop'
+echo "Building GUS and ApiDB Model Objects"
 
-if [ $failed -ne 0 ]; then
-  exit 1
-fi
+touch $PROJECT_HOME/GusSchema/Definition/config/gus_schema.xml
+bld GUS
+
+stopInstance

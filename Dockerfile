@@ -63,8 +63,9 @@ ARG GUS_COMMIT_HASH=bca3334a86f9d86fde04ac38617dc40a6f9c410d \
     CBIL_COMMIT_HASH=190c888a0c35653d0449178807f2e09b6ba4d871 \
     INSTALL_COMMIT_HASH=2ca76b87ca70c0b69d0576298f8c87df6f904f82\
     GUS_SCHEMA_COMMIT_HASH=5ecc2343b600c9bd3a1929ff91a9ca2fd54844f3 \
-    APIDB_SCHEMA_COMMIT_HASH=0373d82318b41abfbe4f92cacc6df13d41e01e87 \
-    LIB_INSTALL_COMMIT_HASH=6ce2790ef9f585e0abdad1b9cb0c75ac0a51fc11
+    APIDB_SCHEMA_COMMIT_HASH=1796a7067fde30779bd1e55753907c1481752d75 \
+    LIB_INSTALL_COMMIT_HASH=c46e5949e1c25be99c0ba73b3e2633d2a499c58c \
+    APICOMMONDATA_COMMIT_HASH=3b4c40f1fe06880c34df4c4616ad8da3239e85fd
 
 ENV GUS_HOME=/opt/veupathdb/gus_home \
     PROJECT_HOME=/opt/veupathdb/project_home \
@@ -76,16 +77,19 @@ ENV PATH="$PATH:${GUS_HOME}/bin:${JAVA_HOME}/bin"
 ARG GITHUB_USERNAME \
     GITHUB_TOKEN
 
+# Keep these separate from below so we don't need to reclone
+# after each change to  build process
+COPY ./build/repo-cloning.sh ./
+RUN ./repo-cloning.sh
+
 COPY [ \
-    "build/repo-cloning.sh", \
     "build/build-gus-config.sh", \
     "build/build-gus-home.sh", \
     "build/db-install.sh", \
     "./" \
 ]
 
-RUN ./repo-cloning.sh \
-    && ./build-gus-home.sh \
-    && ./build-gus-config.sh \
-    && ./db-install.sh; \
-    rm -rf ${PROJECT_HOME}/*
+ RUN ./build-gus-config.sh \
+     && ./build-gus-home.sh \
+     && ./db-install.sh;
+     #rm -rf ${PROJECT_HOME}/*
