@@ -59,4 +59,6 @@ echo "Building GUS and ApiDB Model Objects"
 touch $PROJECT_HOME/GusSchema/Definition/config/gus_schema.xml
 bld GUS
 
+insertUserProjectGroup --projectRelease 1 --firstName root --lastName root --userName root --commit
+
 stopInstance

@@ -34,8 +34,3 @@ echo "build GUS plugins"
 bld GUS/PluginMgr
 bld GUS/Supported
 
-echo "build Api plugins"
-cd $PROJECT_HOME/ApiCommonData
-mkdir -p $GUS_HOME/lib/perl/ApiCommonData/Load/Plugin
-cp Load/plugin/perl/*.pm $GUS_HOME/lib/perl/ApiCommonData/Load/Plugin/
-cp -r Load/lib/perl/* $GUS_HOME/lib/perl/ApiCommonData/Load/

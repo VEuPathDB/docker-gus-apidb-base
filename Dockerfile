@@ -64,18 +64,20 @@ ARG GUS_COMMIT_HASH=bca3334a86f9d86fde04ac38617dc40a6f9c410d \
     INSTALL_COMMIT_HASH=2ca76b87ca70c0b69d0576298f8c87df6f904f82\
     GUS_SCHEMA_COMMIT_HASH=5ecc2343b600c9bd3a1929ff91a9ca2fd54844f3 \
     APIDB_SCHEMA_COMMIT_HASH=1796a7067fde30779bd1e55753907c1481752d75 \
-    LIB_INSTALL_COMMIT_HASH=c46e5949e1c25be99c0ba73b3e2633d2a499c58c \
-    APICOMMONDATA_COMMIT_HASH=3b4c40f1fe06880c34df4c4616ad8da3239e85fd
+    LIB_INSTALL_COMMIT_HASH=c46e5949e1c25be99c0ba73b3e2633d2a499c58c
+
 
 ENV GUS_HOME=/opt/veupathdb/gus_home \
     PROJECT_HOME=/opt/veupathdb/project_home \
-    TEMPLATE_DB_NAME="template" \
+    TEMPLATE_DB_NAME="gus_template" \
     TEMPLATE_DB_USER="someone" \
     TEMPLATE_DB_PASS="password"
-ENV PATH="$PATH:${GUS_HOME}/bin:${JAVA_HOME}/bin"
+ENV PATH="$PATH:${GUS_HOME}/bin:${JAVA_HOME}/bin:/usr/lib/postgresql/15/bin"
 
 ARG GITHUB_USERNAME \
     GITHUB_TOKEN
+
+
 
 # Keep these separate from below so we don't need to reclone
 # after each change to  build process
@@ -93,3 +95,12 @@ COPY [ \
      && ./build-gus-home.sh \
      && ./db-install.sh;
      #rm -rf ${PROJECT_HOME}/*
+
+RUN apt-get update \
+    && apt-get install -y curl
+
+RUN curl -fsSL https://get.nextflow.io | NXF_VER=23.10.0 bash && mv nextflow /usr/bin/nextflow
+
+RUN wget -O fbw.zip https://github.com/VEuPathDB/script-find-bin-width/releases/download/v0.5.1/fbw-linux-0.5.1.zip \
+    && unzip fbw.zip \
+    && mv find-bin-width /usr/bin/find-bin-width

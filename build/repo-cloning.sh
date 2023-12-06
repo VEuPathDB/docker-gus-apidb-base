@@ -45,7 +45,3 @@ git clone https://github.com/VEuPathDB/SchemaInstallUtils.git
 cd SchemaInstallUtils
 git reset --hard $LIB_INSTALL_COMMIT_HASH
 
-cd $PROJECT_HOME
-git clone https://github.com/VEuPathDB/ApiCommonData.git
-cd ApiCommonData
-git reset --hard $APICOMMONDATA_COMMIT_HASH
