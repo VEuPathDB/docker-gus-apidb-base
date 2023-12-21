@@ -99,6 +99,3 @@ RUN apt-get update \
 
 RUN curl -fsSL https://get.nextflow.io | NXF_VER=23.10.0 bash && mv nextflow /usr/bin/nextflow
 
-RUN wget -O fbw.zip https://github.com/VEuPathDB/script-find-bin-width/releases/download/v0.5.1/fbw-linux-0.5.1.zip \
-    && unzip fbw.zip \
-    && mv find-bin-width /usr/bin/find-bin-width
