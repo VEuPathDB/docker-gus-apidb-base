@@ -71,7 +71,9 @@ ENV GUS_HOME=/opt/veupathdb/gus_home \
     PROJECT_HOME=/opt/veupathdb/project_home \
     TEMPLATE_DB_NAME="gus_template" \
     TEMPLATE_DB_USER="someone" \
-    TEMPLATE_DB_PASS="password"
+    TEMPLATE_DB_PASS="password"\
+    LANG="en_US.UTF-8"
+
 ENV PATH="$PATH:${GUS_HOME}/bin:${JAVA_HOME}/bin:/usr/lib/postgresql/15/bin"
 
 ARG GITHUB_USERNAME \
