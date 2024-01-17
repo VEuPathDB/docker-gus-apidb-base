@@ -9,7 +9,7 @@ RUN apt-get update \
     && apt-get install -y git perl libaio1 unzip wget postgresql-15 make gcc \
         libtree-dagnode-perl libxml-simple-perl libjson-perl libtext-csv-perl \
         libdate-manip-perl libdbi-perl libdbd-pg-perl libtest-nowarnings-perl \
-        libmodule-install-rdf-perl libstatistics-descriptive-perl \
+        libmodule-install-rdf-perl libstatistics-descriptive-perl curl \
     && mkdir -p ${JAVA_HOME} \
     && cd ${JAVA_HOME} \
     && wget -O java.tgz https://corretto.aws/downloads/latest/amazon-corretto-21-x64-linux-jdk.tar.gz \
@@ -79,6 +79,7 @@ ENV PATH="$PATH:${GUS_HOME}/bin:${JAVA_HOME}/bin:/usr/lib/postgresql/15/bin"
 ARG GITHUB_USERNAME \
     GITHUB_TOKEN
 
+
 # Keep these separate from below so we don't need to reclone
 # after each change to  build process
 COPY ./build/repo-cloning.sh ./
@@ -96,8 +97,6 @@ COPY [ \
      && ./db-install.sh;
      #rm -rf ${PROJECT_HOME}/*
 
-RUN apt-get update \
-    && apt-get install -y curl
 
 RUN curl -fsSL https://get.nextflow.io | NXF_VER=23.10.0 bash && mv nextflow /usr/bin/nextflow
 
