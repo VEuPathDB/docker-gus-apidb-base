@@ -15,7 +15,7 @@ RUN apt-get update \
     && wget -O java.tgz https://corretto.aws/downloads/latest/amazon-corretto-21-x64-linux-jdk.tar.gz \
     && tar -xf java.tgz \
     && rm java.tgz \
-    && mv amazon-corretto-21.0.1.12.1-linux-x64/* . \
+    && mv amazon-corretto-21*-linux-x64/* . \
     && apt-get clean \
     \
     && mkdir -p /opt/ant \
@@ -71,8 +71,8 @@ ENV GUS_HOME=/opt/veupathdb/gus_home \
     PROJECT_HOME=/opt/veupathdb/project_home \
     TEMPLATE_DB_NAME="gus_template" \
     TEMPLATE_DB_USER="someone" \
-    TEMPLATE_DB_PASS="password"\
-    LANG="en_US.UTF-8"
+    TEMPLATE_DB_PASS="password"
+    #LANG="en_US.UTF-8"
 
 ENV PATH="$PATH:${GUS_HOME}/bin:${JAVA_HOME}/bin:/usr/lib/postgresql/15/bin"
 
