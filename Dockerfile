@@ -1,26 +1,37 @@
 FROM ubuntu:23.10
 
+ARG JAVA_VERSION=21.0.2.13.1 \
+    ANT_VERSION=1.10.14 \
+    MAVEN_VERSION=3.9.5
+
 ENV PGDATA=/var/lib/postgresql/data \
     ORACLE_HOME=/opt/oracle \
     LD_LIBRARY_PATH=/opt/oracle \
-    JAVA_HOME=/opt/java
+    JAVA_HOME=/opt/java \
+    LANG=en_US.UTF-8
 
 RUN apt-get update \
+    && apt-get install -y locales \
+    && sed -i -e "s/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/" /etc/locale.gen \
+    && dpkg-reconfigure --frontend=noninteractive locales \
+    && update-locale LANG=en_US.UTF-8 \
+    \
     && apt-get install -y git perl libaio1 unzip wget postgresql-15 make gcc \
         libtree-dagnode-perl libxml-simple-perl libjson-perl libtext-csv-perl \
         libdate-manip-perl libdbi-perl libdbd-pg-perl libtest-nowarnings-perl \
         libmodule-install-rdf-perl libstatistics-descriptive-perl \
+    && apt-get clean \
+    \
     && mkdir -p ${JAVA_HOME} \
     && cd ${JAVA_HOME} \
-    && wget -O java.tgz https://corretto.aws/downloads/latest/amazon-corretto-21-x64-linux-jdk.tar.gz \
+    && wget -O java.tgz https://corretto.aws/downloads/resources/${JAVA_VERSION}/amazon-corretto-${JAVA_VERSION}-linux-x64.tar.gz \
     && tar -xf java.tgz \
     && rm java.tgz \
-    && mv amazon-corretto-21.0.1.12.1-linux-x64/* . \
-    && apt-get clean \
+    && mv amazon-corretto-${JAVA_VERSION}-linux-x64/* . \
     \
     && mkdir -p /opt/ant \
     && cd /opt/ant \
-    && wget -O ant.tgz https://dlcdn.apache.org//ant/binaries/apache-ant-1.10.14-bin.tar.gz \
+    && wget -O ant.tgz https://dlcdn.apache.org//ant/binaries/apache-ant-${ANT_VERSION}-bin.tar.gz \
     && tar -xf ant.tgz \
     && rm ant.tgz \
     && mv apache-ant-1.10.14/* . \
@@ -28,10 +39,10 @@ RUN apt-get update \
     \
     && mkdir -p /opt/maven \
     && cd /opt/maven \
-    && wget -O maven.tgz https://dlcdn.apache.org/maven/maven-3/3.9.5/binaries/apache-maven-3.9.5-bin.tar.gz \
+    && wget -O maven.tgz https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz \
     && tar -xf maven.tgz \
     && rm maven.tgz \
-    && mv apache-maven-3.9.5/* . \
+    && mv apache-maven-${MAVEN_VERSION}/* . \
     && ln -s /opt/maven/bin/mvn /usr/bin/mvn \
     \
     && mkdir -p ${ORACLE_HOME} \
