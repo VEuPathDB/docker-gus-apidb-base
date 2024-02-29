@@ -51,13 +51,15 @@ RUN apt-get update \
     && wget https://download.oracle.com/otn_software/linux/instantclient/2111000/instantclient-basic-linux.x64-21.11.0.0.0dbru.zip -O instant.zip \
     && wget https://download.oracle.com/otn_software/linux/instantclient/2111000/instantclient-sqlplus-linux.x64-21.11.0.0.0dbru.zip -O sqlplus.zip \
     && wget https://download.oracle.com/otn_software/linux/instantclient/2111000/instantclient-sdk-linux.x64-21.11.0.0.0dbru.zip -O sdk.zip \
+    && wget https://download.oracle.com/otn_software/linux/instantclient/2111000/instantclient-tools-linux.x64-21.11.0.0.0dbru.zip -O tools.zip \
     && unzip instant.zip \
     && unzip sqlplus.zip \
     && unzip sdk.zip \
-    && rm instant.zip sdk.zip sqlplus.zip \
+    && unzip tools.zip \
+    && rm instant.zip sdk.zip sqlplus.zip tools.zip \
     && mv instantclient_21_11/* . \
     && rm -rf instantclient_21_11 \
-    && mv sqlplus /usr/bin/sqlplus \
+    && mv -t /usr/bin/ sqlplus sqlldr \
     && cpan DBD::Oracle \
     && mkdir -p /run/postgresql \
     && chown postgres:postgres /run/postgresql
@@ -85,11 +87,10 @@ ENV GUS_HOME=/opt/veupathdb/gus_home \
     TEMPLATE_DB_USER="someone" \
     TEMPLATE_DB_PASS="password"
 
-ENV PATH="$PATH:${GUS_HOME}/bin:${JAVA_HOME}/bin:/usr/lib/postgresql/15/bin"
+ENV PATH="$PATH:${PROJECT_HOME}/install/bin:${GUS_HOME}/bin:${JAVA_HOME}/bin:/usr/lib/postgresql/15/bin"
 
 ARG GITHUB_USERNAME \
     GITHUB_TOKEN
-
 
 # Keep these separate from below so we don't need to reclone
 # after each change to  build process
@@ -106,8 +107,5 @@ COPY [ \
  RUN ./build-gus-config.sh \
      && ./build-gus-home.sh \
      && ./db-install.sh;
-     #rm -rf ${PROJECT_HOME}/*
-
 
 RUN curl -fsSL https://get.nextflow.io | NXF_VER=23.10.0 bash && mv nextflow /usr/bin/nextflow
-

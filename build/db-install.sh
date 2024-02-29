@@ -2,8 +2,6 @@
 
 set -e
 
-PATH=$PROJECT_HOME/install/bin:$GUS_HOME/bin:$PATH
-
 stopInstance() {
   su postgres -c '/usr/lib/postgresql/15/bin/pg_ctl stop'
 }
