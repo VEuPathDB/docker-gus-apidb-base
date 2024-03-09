@@ -106,7 +106,7 @@ ARG GITHUB_USERNAME \
 
 # Keep these separate from below so we don't need to reclone
 # after each change to  build process
-COPY docker-scripts/repo-cloning.sh docker-scripts
+COPY docker-scripts/repo-cloning.sh docker-scripts/
 RUN docker-scripts/repo-cloning.sh
 
 COPY [ \
