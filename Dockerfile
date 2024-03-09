@@ -1,4 +1,16 @@
-FROM ubuntu:23.10
+FROM golang:1.22-alpine3.19 AS go-tools-build
+
+RUN apk add --no-cache make
+
+WORKDIR /tmp/build
+
+COPY tools .
+
+RUN make build-go-tools
+
+
+
+FROM ubuntu:23.10 AS runtime
 
 ARG JAVA_VERSION=21.0.2.13.1 \
     ANT_VERSION=1.10.14 \
@@ -104,8 +116,10 @@ COPY [ \
     "./" \
 ]
 
- RUN ./build-gus-config.sh \
-     && ./build-gus-home.sh \
-     && ./db-install.sh;
+RUN ./build-gus-config.sh \
+    && ./build-gus-home.sh \
+    && ./db-install.sh;
+
+COPY --from=go-tools-build /tmp/build/bin /usr/bin/
 
 RUN curl -fsSL https://get.nextflow.io | NXF_VER=23.10.0 bash && mv nextflow /usr/bin/nextflow

@@ -1,0 +1,6 @@
+*.adoc
+license
+Jenkinsfile
+/makefile
+.gitignore
+build/
