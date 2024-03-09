@@ -106,19 +106,20 @@ ARG GITHUB_USERNAME \
 
 # Keep these separate from below so we don't need to reclone
 # after each change to  build process
-COPY ./build/repo-cloning.sh ./
-RUN ./repo-cloning.sh
+COPY docker-scripts/repo-cloning.sh docker-scripts
+RUN docker-scripts/repo-cloning.sh
 
 COPY [ \
-    "build/build-gus-config.sh", \
-    "build/build-gus-home.sh", \
-    "build/db-install.sh", \
-    "./" \
+    "docker-scripts/build-gus-config.sh", \
+    "docker-scripts/build-gus-home.sh", \
+    "docker-scripts/db-install.sh", \
+    "docker-scripts/" \
 ]
 
-RUN ./build-gus-config.sh \
-    && ./build-gus-home.sh \
-    && ./db-install.sh;
+RUN docker-scripts/build-gus-config.sh \
+    && docker-scripts/build-gus-home.sh \
+    && docker-scripts/db-install.sh \
+    && rm -rf docker-scripts
 
 COPY --from=go-tools-build /tmp/build/bin /usr/bin/
 
