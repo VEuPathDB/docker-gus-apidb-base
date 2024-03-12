@@ -31,17 +31,12 @@ func main() {
 }
 
 func handleFailedTask(ws string, nfLog *os.File) {
-	printLog("\n\n\nNEXTFLOW HOST LOG\n\n\n")
-	printNextflowLog(nfLog)
-
 	if !fileExists(ws) {
 		printLog("\n\nNextflow log indicates a task failed, but the workspace for the failed task no longer exists.")
 		os.Exit(1)
 	}
 
 	exitCode := getExitCode(ws)
-
-	printLog("\n\n\nNEXTFLOW TASK LOG\n\n\n")
 
 	// exit code 99 == validation error
 	if exitCode == 99 {
@@ -124,10 +119,6 @@ func getExitCode(dir string) uint8 {
 	}
 
 	return uint8(mustR(strconv.ParseUint(strings.TrimSpace(string(mustR(os.ReadFile(file)))), 10, 8)))
-}
-
-func printNextflowLog(nfLog *os.File) {
-	printFileTo(nfLog, "Nextflow >> ", printLog)
 }
 
 func printTaskStderr(dir string) {
