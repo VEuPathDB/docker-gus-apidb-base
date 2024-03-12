@@ -1,0 +1,19 @@
+= NextFlow Result Processor
+
+Script to process the result directory of a NextFlow execution.
+
+This tool does the following:
+
+. Attempts to determine the actual exit code of the script executed by NextFlow,
+  as NextFlow swallows script exit codes, only emitting them in log output.
+. Dumps the stdout and stderr from script executions to stderr.
+. Exits with the same exit code as the failing NextFlow script if the NextFlow
+  workflow failed.
+
+This script must be executed in the same working directory as NextFlow.
+
+== Optional Flags
+
+`--verbose`::
+Prints out the stdout and stderr of all scripts executed as part of a NextFlow
+workflow regardless of the workflow exit status.

@@ -19,18 +19,25 @@ const (
 )
 
 func main() {
+	verbose := false
+	for _, v := range os.Args {
+		if v == "--verbose" {
+			verbose = true
+		}
+	}
+
 	nfLog := requireNextflowLogFile()
 	defer nfLog.Close()
 
 	if failedTaskWS, found := findFailedTaskWorkspaceDir(nfLog); found {
 		mustI(nfLog.Seek(0, 0))
-		handleFailedTask(failedTaskWS, nfLog)
-	} else {
+		handleFailedTask(failedTaskWS)
+	} else if verbose {
 		handleNFSuccess()
 	}
 }
 
-func handleFailedTask(ws string, nfLog *os.File) {
+func handleFailedTask(ws string) {
 	if !fileExists(ws) {
 		printLog("\n\nNextflow log indicates a task failed, but the workspace for the failed task no longer exists.")
 		os.Exit(1)
