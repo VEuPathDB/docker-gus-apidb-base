@@ -12,7 +12,7 @@ RUN make build-go-tools
 
 FROM ubuntu:23.10 AS runtime
 
-ARG JAVA_VERSION=21.0.2.13.1 \
+ARG JAVA_VERSION=21.0.2.13.1  \
     ANT_VERSION=1.10.14 \
     MAVEN_VERSION=3.9.5
 
