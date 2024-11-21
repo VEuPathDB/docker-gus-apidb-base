@@ -10,11 +10,11 @@ RUN make build-go-tools
 
 
 
-FROM ubuntu:23.10 AS runtime
+FROM ubuntu:24.10 AS runtime
 
-ARG JAVA_VERSION=21.0.2.13.1  \
-    ANT_VERSION=1.10.14 \
-    MAVEN_VERSION=3.9.5
+ARG JAVA_VERSION=21.0.5.11.1  \
+    ANT_VERSION=1.10.15 \
+    MAVEN_VERSION=3.9.9
 
 ENV PGDATA=/var/lib/postgresql/data \
     ORACLE_HOME=/opt/oracle \
@@ -28,12 +28,13 @@ RUN apt-get update \
     && dpkg-reconfigure --frontend=noninteractive locales \
     && update-locale LANG=en_US.UTF-8 \
     \
-    && apt-get install -y git perl libaio1 unzip wget postgresql-15 make gcc \
+    && apt-get install -y git perl libaio1t64 unzip wget postgresql-16 make gcc \
         libtree-dagnode-perl libxml-simple-perl libjson-perl libtext-csv-perl \
         libdate-manip-perl libdbi-perl libdbd-pg-perl libtest-nowarnings-perl \
         libmodule-install-rdf-perl libstatistics-descriptive-perl curl \
         libmodule-install-rdf-perl libstatistics-descriptive-perl \
     && apt-get clean \
+    && ln -s /usr/lib/x86_64-linux-gnu/libaio.so.1t64 /usr/lib/x86_64-linux-gnu/libaio.so.1 \
     \
     && mkdir -p ${JAVA_HOME} \
     && cd ${JAVA_HOME} \
@@ -47,7 +48,7 @@ RUN apt-get update \
     && wget -O ant.tgz https://dlcdn.apache.org//ant/binaries/apache-ant-${ANT_VERSION}-bin.tar.gz \
     && tar -xf ant.tgz \
     && rm ant.tgz \
-    && mv apache-ant-1.10.14/* . \
+    && mv apache-ant-${ANT_VERSION}/* . \
     && ln -s /opt/ant/bin/ant /usr/bin/ant \
     \
     && mkdir -p /opt/maven \
@@ -60,19 +61,19 @@ RUN apt-get update \
     \
     && mkdir -p ${ORACLE_HOME} \
     && cd ${ORACLE_HOME} \
-    && wget https://download.oracle.com/otn_software/linux/instantclient/2111000/instantclient-basic-linux.x64-21.11.0.0.0dbru.zip -O instant.zip \
-    && wget https://download.oracle.com/otn_software/linux/instantclient/2111000/instantclient-sqlplus-linux.x64-21.11.0.0.0dbru.zip -O sqlplus.zip \
-    && wget https://download.oracle.com/otn_software/linux/instantclient/2111000/instantclient-sdk-linux.x64-21.11.0.0.0dbru.zip -O sdk.zip \
-    && wget https://download.oracle.com/otn_software/linux/instantclient/2111000/instantclient-tools-linux.x64-21.11.0.0.0dbru.zip -O tools.zip \
-    && unzip instant.zip \
-    && unzip sqlplus.zip \
-    && unzip sdk.zip \
-    && unzip tools.zip \
+    && wget https://download.oracle.com/otn_software/linux/instantclient/2360000/instantclient-basic-linux.x64-23.6.0.24.10.zip -O instant.zip \
+    && wget https://download.oracle.com/otn_software/linux/instantclient/2360000/instantclient-sqlplus-linux.x64-23.6.0.24.10.zip -O sqlplus.zip \
+    && wget https://download.oracle.com/otn_software/linux/instantclient/2360000/instantclient-sdk-linux.x64-23.6.0.24.10.zip -O sdk.zip \
+    && wget https://download.oracle.com/otn_software/linux/instantclient/2360000/instantclient-tools-linux.x64-23.6.0.24.10.zip -O tools.zip \
+    && unzip -o instant.zip \
+    && unzip -o sqlplus.zip \
+    && unzip -o sdk.zip \
+    && unzip -o tools.zip \
     && rm instant.zip sdk.zip sqlplus.zip tools.zip \
-    && mv instantclient_21_11/* . \
-    && rm -rf instantclient_21_11 \
+    && mv instantclient_23_6/* . \
+    && rm -rf instantclient_23_6 \
     && mv -t /usr/bin/ sqlplus sqlldr \
-    && cpan DBD::Oracle \
+    && cpan ZARQUON/DBD-Oracle-1.83.tar.gz \
     && mkdir -p /run/postgresql \
     && chown postgres:postgres /run/postgresql
 
@@ -81,7 +82,7 @@ COPY [ \
     "pg/pg_hba.conf", \
     "pg/pg_ident.conf", \
     "pg/postgresql.conf", \
-    "/etc/postgresql/15/main/" \
+    "/etc/postgresql/16/main/" \
 ]
 
 # Required variables.
@@ -99,7 +100,7 @@ ENV GUS_HOME=/opt/veupathdb/gus_home \
     TEMPLATE_DB_USER="someone" \
     TEMPLATE_DB_PASS="password"
 
-ENV PATH="$PATH:${PROJECT_HOME}/install/bin:${GUS_HOME}/bin:${JAVA_HOME}/bin:/usr/lib/postgresql/15/bin"
+ENV PATH="$PATH:${PROJECT_HOME}/install/bin:${GUS_HOME}/bin:${JAVA_HOME}/bin:/usr/lib/postgresql/16/bin"
 
 ARG GITHUB_USERNAME \
     GITHUB_TOKEN

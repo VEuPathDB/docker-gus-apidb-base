@@ -3,7 +3,7 @@
 set -e
 
 stopInstance() {
-  su postgres -c '/usr/lib/postgresql/15/bin/pg_ctl stop'
+  su postgres -c '/usr/lib/postgresql/16/bin/pg_ctl stop'
 }
 
 stopInstanceAndExit() {
@@ -16,8 +16,8 @@ trap 'stopInstanceAndExit' ERR
 
 echo "Initializing Postgres"
 su postgres <<EOSU
-/usr/lib/postgresql/15/bin/initdb
-/usr/lib/postgresql/15/bin/pg_ctl start
+/usr/lib/postgresql/16/bin/initdb
+/usr/lib/postgresql/16/bin/pg_ctl start
 EOSU
 
 echo "Creating 'indx' tablespace directory"

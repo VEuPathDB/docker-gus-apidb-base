@@ -1,8 +1,10 @@
+CONTAINER_CMD := $(shell if command -v podman 2>&1 >/dev/null; then echo podman; else echo docker; fi)
+
 default:
 	@echo No.
 
 build: Dockerfile
-	@docker build -t gus-apidb-base:latest --build-arg=GITHUB_USERNAME=${GITHUB_USERNAME} --build-arg=GITHUB_TOKEN=${GITHUB_TOKEN} .
+	@$(CONTAINER_CMD) build -t gus-apidb-base:latest --build-arg=GITHUB_USERNAME=${GITHUB_USERNAME} --build-arg=GITHUB_TOKEN=${GITHUB_TOKEN} .
 
 run:
-	@docker run -it --rm gus-apidb-base:latest
+	@$(CONTAINER_CMD) run -it --rm gus-apidb-base:latest
