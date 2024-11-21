@@ -5,7 +5,7 @@ ApiDB schemata as well as the generated GUS model perl objects.
 
 This container includes:
 
-* PostgreSQL 15
+* PostgreSQL 16
 * Java 21
 * Python 3
 * Perl 5
