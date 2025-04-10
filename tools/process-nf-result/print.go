@@ -7,7 +7,7 @@ import (
 	"path"
 )
 
-func printTaskStderr(filePath string) {
+func printTaskStderr(filePath string, withPrefix bool) {
 	if !fileExists(filePath) {
 		printLog("Nextflow script stderr log file could not be found in workspace " + path.Dir(filePath))
 		printLog("It is possible the task execution failed on initialization")
@@ -17,11 +17,20 @@ func printTaskStderr(filePath string) {
 	file := mustReturn(os.Open(filePath))
 	defer silence(file.Close)
 
-	printFileTo(file, "", printLog)
+	prefix := ""
+	if withPrefix {
+		prefix = "[stderr] "
+	}
+
+	printFileTo(file, prefix, printLog)
 }
 
-func printTaskStdout(path string) {
-	printTaskStdoutTo(path, "[stdout]", printLog)
+func printTaskStdout(path string, withPrefix bool) {
+	if withPrefix {
+		printTaskStdoutTo(path, "[stdout] ", printLog)
+	} else {
+		printTaskStdoutTo(path, "", printLog)
+	}
 }
 
 func printTaskValidationErrors(path string) {

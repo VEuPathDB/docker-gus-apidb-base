@@ -49,29 +49,29 @@ func handleFailure(failedWorkspaceDir string) {
 		if workspace == failedWorkspaceDir {
 			break
 		} else {
-			printLog(fmt.Sprintf("\nTASK %d LOGS\n", i+1))
-			printTaskStdout(path.Join(workspace, stdoutLogFileName))
-			printTaskStderr(path.Join(workspace, stderrLogFileName))
+			printLog(fmt.Sprintf("\nSTEP %d LOGS\n", i+1))
+			printTaskStdout(path.Join(workspace, stdoutLogFileName), true)
+			printTaskStderr(path.Join(workspace, stderrLogFileName), true)
 		}
 	}
 
 	if exitCode == validationErrorCode {
 		printTaskValidationErrors(failedWorkspaceDir)
 	} else {
-		printLog("\nFAILED TASK STDOUT\n")
-		printTaskStdout(path.Join(failedWorkspaceDir, stdoutLogFileName))
+		printLog("\nFAILED STEP STDOUT\n")
+		printTaskStdout(path.Join(failedWorkspaceDir, stdoutLogFileName), false)
 	}
-	printLog("\nFAILED TASK STDERR\n")
-	printTaskStderr(path.Join(failedWorkspaceDir, stderrLogFileName))
+	printLog("\nFAILED STEP STDERR\n")
+	printTaskStderr(path.Join(failedWorkspaceDir, stderrLogFileName), false)
 
 	os.Exit(int(exitCode))
 }
 
 func handleSuccess() {
 	for i, workspace := range collectSortedWorkspaces() {
-		printLog(fmt.Sprintf("\nTASK %d LOGS\n", i+1))
-		printTaskStdout(path.Join(workspace, stdoutLogFileName))
-		printTaskStderr(path.Join(workspace, stderrLogFileName))
+		printLog(fmt.Sprintf("\nSTEP %d LOGS\n", i+1))
+		printTaskStdout(path.Join(workspace, stdoutLogFileName), true)
+		printTaskStderr(path.Join(workspace, stderrLogFileName), true)
 	}
 }
 
