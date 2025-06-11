@@ -10,11 +10,11 @@ RUN make build-go-tools
 
 
 
-FROM ubuntu:24.10 AS runtime
+FROM ubuntu:24.04 AS runtime
 
-ARG JAVA_VERSION=21.0.5.11.1  \
+ARG JAVA_VERSION=21.0.7.6.1 \
     ANT_VERSION=1.10.15 \
-    MAVEN_VERSION=3.9.9
+    MAVEN_VERSION=3.9.10
 
 ENV PGDATA=/var/lib/postgresql/data \
     ORACLE_HOME=/opt/oracle \
@@ -34,46 +34,47 @@ RUN apt-get update \
         libmodule-install-rdf-perl libstatistics-descriptive-perl curl \
         libmodule-install-rdf-perl libstatistics-descriptive-perl \
     && apt-get clean \
-    && ln -s /usr/lib/x86_64-linux-gnu/libaio.so.1t64 /usr/lib/x86_64-linux-gnu/libaio.so.1 \
-    \
-    && mkdir -p ${JAVA_HOME} \
+    && ln -s /usr/lib/x86_64-linux-gnu/libaio.so.1t64 /usr/lib/x86_64-linux-gnu/libaio.so.1
+
+RUN mkdir -p ${JAVA_HOME} \
     && cd ${JAVA_HOME} \
     && wget -O java.tgz https://corretto.aws/downloads/resources/${JAVA_VERSION}/amazon-corretto-${JAVA_VERSION}-linux-x64.tar.gz \
     && tar -xf java.tgz \
     && rm java.tgz \
-    && mv amazon-corretto-${JAVA_VERSION}-linux-x64/* . \
-    \
-    && mkdir -p /opt/ant \
+    && mv amazon-corretto-${JAVA_VERSION}-linux-x64/* .
+
+RUN mkdir -p /opt/ant \
     && cd /opt/ant \
     && wget -O ant.tgz https://dlcdn.apache.org//ant/binaries/apache-ant-${ANT_VERSION}-bin.tar.gz \
     && tar -xf ant.tgz \
     && rm ant.tgz \
     && mv apache-ant-${ANT_VERSION}/* . \
-    && ln -s /opt/ant/bin/ant /usr/bin/ant \
-    \
-    && mkdir -p /opt/maven \
+    && ln -s /opt/ant/bin/ant /usr/bin/ant
+
+RUN mkdir -p /opt/maven \
     && cd /opt/maven \
     && wget -O maven.tgz https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz \
     && tar -xf maven.tgz \
     && rm maven.tgz \
     && mv apache-maven-${MAVEN_VERSION}/* . \
-    && ln -s /opt/maven/bin/mvn /usr/bin/mvn \
-    \
-    && mkdir -p ${ORACLE_HOME} \
+    && ln -s /opt/maven/bin/mvn /usr/bin/mvn
+
+RUN mkdir -p ${ORACLE_HOME} \
     && cd ${ORACLE_HOME} \
-    && wget https://download.oracle.com/otn_software/linux/instantclient/2360000/instantclient-basic-linux.x64-23.6.0.24.10.zip -O instant.zip \
-    && wget https://download.oracle.com/otn_software/linux/instantclient/2360000/instantclient-sqlplus-linux.x64-23.6.0.24.10.zip -O sqlplus.zip \
-    && wget https://download.oracle.com/otn_software/linux/instantclient/2360000/instantclient-sdk-linux.x64-23.6.0.24.10.zip -O sdk.zip \
-    && wget https://download.oracle.com/otn_software/linux/instantclient/2360000/instantclient-tools-linux.x64-23.6.0.24.10.zip -O tools.zip \
+    && wget https://download.oracle.com/otn_software/linux/instantclient/2380000/instantclient-basic-linux.x64-23.8.0.25.04.zip -O instant.zip \
+    && wget https://download.oracle.com/otn_software/linux/instantclient/2380000/instantclient-sqlplus-linux.x64-23.8.0.25.04.zip -O sqlplus.zip \
+    && wget https://download.oracle.com/otn_software/linux/instantclient/2380000/instantclient-sdk-linux.x64-23.8.0.25.04.zip -O sdk.zip \
+    && wget https://download.oracle.com/otn_software/linux/instantclient/2380000/instantclient-tools-linux.x64-23.8.0.25.04.zip -O tools.zip \
     && unzip -o instant.zip \
     && unzip -o sqlplus.zip \
     && unzip -o sdk.zip \
     && unzip -o tools.zip \
     && rm instant.zip sdk.zip sqlplus.zip tools.zip \
-    && mv instantclient_23_6/* . \
-    && rm -rf instantclient_23_6 \
-    && mv -t /usr/bin/ sqlplus sqlldr \
-    && cpan ZARQUON/DBD-Oracle-1.83.tar.gz \
+    && mv instantclient_23_8/* . \
+    && rm -rf instantclient_23_8 \
+    && mv -t /usr/bin/ sqlplus sqlldr
+
+    RUN cpan ZARQUON/DBD-Oracle-1.83.tar.gz \
     && mkdir -p /run/postgresql \
     && chown postgres:postgres /run/postgresql
 
