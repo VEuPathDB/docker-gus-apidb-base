@@ -74,7 +74,7 @@ RUN mkdir -p ${ORACLE_HOME} \
     && rm -rf instantclient_23_8 \
     && mv -t /usr/bin/ sqlplus sqlldr
 
-    RUN cpan ZARQUON/DBD-Oracle-1.83.tar.gz \
+RUN cpan ZARQUON/DBD-Oracle-1.83.tar.gz \
     && mkdir -p /run/postgresql \
     && chown postgres:postgres /run/postgresql
 
