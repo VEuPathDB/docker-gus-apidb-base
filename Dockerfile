@@ -32,7 +32,7 @@ RUN apt-get update \
         libtree-dagnode-perl libxml-simple-perl libjson-perl libtext-csv-perl \
         libdate-manip-perl libdbi-perl libdbd-pg-perl libtest-nowarnings-perl \
         libmodule-install-rdf-perl libstatistics-descriptive-perl curl \
-        libmodule-install-rdf-perl libstatistics-descriptive-perl \
+        libmodule-install-rdf-perl libstatistics-descriptive-perl netcat-openbsd \
     && apt-get clean \
     && ln -s /usr/lib/x86_64-linux-gnu/libaio.so.1t64 /usr/lib/x86_64-linux-gnu/libaio.so.1
 
