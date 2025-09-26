@@ -14,7 +14,7 @@ FROM ubuntu:24.04 AS runtime
 
 ARG JAVA_VERSION=21.0.7.6.1 \
     ANT_VERSION=1.10.15 \
-    MAVEN_VERSION=3.9.10
+    MAVEN_VERSION=3.9.11
 
 ENV PGDATA=/var/lib/postgresql/data \
     ORACLE_HOME=/opt/oracle \
