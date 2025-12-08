@@ -12,7 +12,7 @@ RUN make build-go-tools
 
 FROM ubuntu:24.04 AS runtime
 
-ARG JAVA_VERSION=21.0.7.6.1 \
+ARG JAVA_VERSION=25.0.1.9.1 \
     ANT_VERSION=1.10.15 \
     MAVEN_VERSION=3.9.11
 
@@ -125,4 +125,4 @@ RUN docker-scripts/build-gus-config.sh \
 
 COPY --from=go-tools-build /tmp/build/bin /usr/bin/
 
-RUN curl -fsSL https://get.nextflow.io | NXF_VER=23.10.0 bash && mv nextflow /usr/bin/nextflow
+RUN curl -fsSL https://get.nextflow.io | NXF_VER=25.10.2 bash && mv nextflow /usr/bin/nextflow
