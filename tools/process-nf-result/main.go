@@ -56,7 +56,7 @@ func handleFailure(failedWorkspaceDir string) {
 	}
 
 	if exitCode == validationErrorCode {
-		printTaskValidationErrors(failedWorkspaceDir)
+		printTaskValidationErrors(path.Join(failedWorkspaceDir, stdoutLogFileName))
 	} else {
 		printLog("\nFAILED STEP STDOUT\n")
 		printTaskStdout(path.Join(failedWorkspaceDir, stdoutLogFileName), false)
